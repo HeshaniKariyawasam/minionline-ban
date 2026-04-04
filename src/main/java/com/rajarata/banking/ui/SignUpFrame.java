@@ -24,7 +24,7 @@ public class SignUpFrame extends JFrame {
         setSize(450, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        getContentPane().setBackground(ThemeUtil.COLOR_BG_PANEL);
+        getContentPane().setBackground(ThemeUtil.COLOR_BACKGROUND);
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -33,7 +33,7 @@ public class SignUpFrame extends JFrame {
 
         JLabel titleLabel = new JLabel("Create an Account");
         titleLabel.setFont(ThemeUtil.HEADER_FONT);
-        titleLabel.setForeground(ThemeUtil.COLOR_YELLOW);
+        titleLabel.setForeground(ThemeUtil.COLOR_PRIMARY);
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
         add(titleLabel, gbc);
@@ -65,8 +65,7 @@ public class SignUpFrame extends JFrame {
         add(registerButton, gbc);
 
         JButton backButton = new JButton("Back to Login");
-        backButton.setBackground(ThemeUtil.COLOR_BROWN);
-        backButton.setForeground(Color.WHITE);
+        ThemeUtil.styleSecondaryButton(backButton);
         backButton.addActionListener(e -> {
             new LoginFrame(userDAO).setVisible(true);
             dispose();
@@ -79,7 +78,7 @@ public class SignUpFrame extends JFrame {
         gbc.gridx = x; gbc.gridy = y;
         JLabel lbl = new JLabel(text);
         lbl.setFont(ThemeUtil.LABEL_FONT);
-        lbl.setForeground(ThemeUtil.COLOR_YELLOW);
+        lbl.setForeground(ThemeUtil.COLOR_PRIMARY);
         add(lbl, gbc);
     }
 
