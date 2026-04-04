@@ -33,13 +33,21 @@ public class AdminDashboard extends JFrame {
         this.systemScheduler = new SystemScheduler();
 
         setTitle("Administrator Dashboard — " + admin.getName());
-        setSize(950, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        getContentPane().setBackground(ThemeUtil.COLOR_BG_PANEL);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(ThemeUtil.COLOR_BACKGROUND);
+        
+        // Header
+        mainPanel.add(createHeaderPanel(admin), BorderLayout.NORTH);
+        
+        getContentPane().setBackground(ThemeUtil.COLOR_BACKGROUND);
 
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setFont(ThemeUtil.LABEL_FONT);
+        tabbedPane.setBackground(ThemeUtil.COLOR_BACKGROUND);
 
         tabbedPane.addTab("👥 User Management",     createUserPanel());
         tabbedPane.addTab("📊 Transaction Overview", createTransactionPanel());
@@ -47,9 +55,82 @@ public class AdminDashboard extends JFrame {
         tabbedPane.addTab("⚙️ System Operations",   createSystemOperationsPanel());
         tabbedPane.addTab("📑 Business Reports",    createBusinessReportsPanel());
 
-        add(tabbedPane);
+        mainPanel.add(tabbedPane, BorderLayout.CENTER);
+        add(mainPanel);
         refreshUserTable();
         refreshTransactionTable();
+    }
+
+    private JPanel createHeaderPanel(Administrator admin) {
+        JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BorderLayout());
+        headerPanel.setBackground(ThemeUtil.COLOR_PRIMARY);
+        headerPanel.setBorder(new EmptyBorder(12, 24, 12, 24));
+
+        // Left: Logo and Admin branding
+        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 0));
+        leftPanel.setBackground(ThemeUtil.COLOR_PRIMARY);
+        
+        // Load and display logo
+        try {
+            ImageIcon logoIcon = new ImageIcon("D:\\OOP PROJECT GIT\\minionline-ban\\Rajarata_logo.png");
+            Image logoImage = logoIcon.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
+            JLabel logoLabel = new JLabel(new ImageIcon(logoImage));
+            leftPanel.add(logoLabel);
+        } catch (Exception e) {
+            // Fix emoji display for logo
+            JLabel logoPlaceholder = new JLabel("🏦");
+            Font emojiFont = createEmojiSupportingFont(28);
+            logoPlaceholder.setFont(emojiFont);
+            leftPanel.add(logoPlaceholder);
+        }
+        
+        JLabel brandLabel = new JLabel("ADMIN CONSOLE");
+        brandLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        brandLabel.setForeground(ThemeUtil.COLOR_WHITE);
+        leftPanel.add(brandLabel);
+
+        JLabel adminLabel = new JLabel("Administrator: " + admin.getName());
+        adminLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        adminLabel.setForeground(ThemeUtil.COLOR_WHITE);
+        adminLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel.setBackground(ThemeUtil.COLOR_PRIMARY);
+        centerPanel.add(adminLabel, BorderLayout.CENTER);
+
+        JButton logoutBtn = new JButton("Logout");
+        logoutBtn.setBackground(ThemeUtil.COLOR_WHITE);
+        logoutBtn.setForeground(ThemeUtil.COLOR_PRIMARY);
+        logoutBtn.setFont(new Font("Segoe UI", Font.BOLD, 11));
+        logoutBtn.setFocusPainted(false);
+        logoutBtn.setBorder(BorderFactory.createEmptyBorder(6, 12, 6, 12));
+        logoutBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        logoutBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                logoutBtn.setBackground(new Color(230, 230, 230));
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                logoutBtn.setBackground(ThemeUtil.COLOR_WHITE);
+            }
+        });
+        logoutBtn.addActionListener(e -> {
+            dispose();
+            new LoginFrame(userDAO).setVisible(true);
+        });
+
+        // Right panel with logout button
+        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        rightPanel.setBackground(ThemeUtil.COLOR_PRIMARY);
+        rightPanel.add(logoutBtn);
+
+        headerPanel.add(leftPanel, BorderLayout.WEST);
+        headerPanel.add(centerPanel, BorderLayout.CENTER);
+        headerPanel.add(rightPanel, BorderLayout.EAST);
+
+        return headerPanel;
     }
 
     // ─────────────────────────────────────────────────────────────────
@@ -57,11 +138,11 @@ public class AdminDashboard extends JFrame {
     // ─────────────────────────────────────────────────────────────────
     private JPanel createUserPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(ThemeUtil.COLOR_BG_PANEL);
+        panel.setBackground(ThemeUtil.COLOR_BACKGROUND);
 
         // Controls
         JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        controls.setBackground(ThemeUtil.COLOR_BROWN);
+        controls.setBackground(ThemeUtil.COLOR_BACKGROUND);
         controls.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         JTextField emailField = new JTextField(12);
@@ -109,7 +190,7 @@ public class AdminDashboard extends JFrame {
 
         // Remove button
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
-        bottom.setBackground(ThemeUtil.COLOR_BROWN);
+        bottom.setBackground(ThemeUtil.COLOR_BACKGROUND);
         JButton removeButton = new JButton("Remove Selected User");
         ThemeUtil.styleButton(removeButton);
         removeButton.addActionListener(e -> {
@@ -137,7 +218,7 @@ public class AdminDashboard extends JFrame {
     // ─────────────────────────────────────────────────────────────────
     private JPanel createTransactionPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(ThemeUtil.COLOR_BG_PANEL);
+        panel.setBackground(ThemeUtil.COLOR_BACKGROUND);
 
         String[] cols = {"Transaction ID", "Account", "Type", "Amount (LKR)", "Status", "Timestamp"};
         txTableModel = new DefaultTableModel(cols, 0) {
@@ -152,7 +233,7 @@ public class AdminDashboard extends JFrame {
         panel.add(new JScrollPane(table), BorderLayout.CENTER);
 
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
-        bottom.setBackground(ThemeUtil.COLOR_BG_PANEL);
+        bottom.setBackground(ThemeUtil.COLOR_BACKGROUND);
         JButton refreshBtn = new JButton("Refresh");
         ThemeUtil.styleButton(refreshBtn);
         refreshBtn.addActionListener(e -> refreshTransactionTable());
@@ -167,11 +248,11 @@ public class AdminDashboard extends JFrame {
     // ─────────────────────────────────────────────────────────────────
     private JPanel createAuditLogPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(ThemeUtil.COLOR_BG_PANEL);
+        panel.setBackground(ThemeUtil.COLOR_BACKGROUND);
 
         JLabel header = new JLabel("Security Audit Log  (security_audit.txt)", SwingConstants.CENTER);
         header.setFont(ThemeUtil.HEADER_FONT);
-        header.setForeground(ThemeUtil.COLOR_YELLOW);
+        header.setForeground(ThemeUtil.COLOR_PRIMARY);
         header.setBorder(new EmptyBorder(12, 10, 12, 10));
         panel.add(header, BorderLayout.NORTH);
 
@@ -188,15 +269,15 @@ public class AdminDashboard extends JFrame {
         panel.add(scrollPane, BorderLayout.CENTER);
 
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
-        bottom.setBackground(ThemeUtil.COLOR_BG_PANEL);
+        bottom.setBackground(ThemeUtil.COLOR_BACKGROUND);
         JButton refreshBtn = new JButton("Refresh Log");
         ThemeUtil.styleButton(refreshBtn);
         refreshBtn.addActionListener(e -> refreshAuditLog());
         bottom.add(refreshBtn);
 
         JButton clearBtn = new JButton("Clear Log File");
-        clearBtn.setBackground(new Color(80, 0, 0));
-        clearBtn.setForeground(ThemeUtil.COLOR_YELLOW);
+        clearBtn.setBackground(ThemeUtil.COLOR_ERROR);
+        clearBtn.setForeground(Color.WHITE);
         clearBtn.setFont(new Font("Segoe UI", Font.BOLD, 13));
         clearBtn.setFocusPainted(false);
         clearBtn.addActionListener(e -> {
@@ -224,7 +305,7 @@ public class AdminDashboard extends JFrame {
     // ─────────────────────────────────────────────────────────────────
     private JPanel createSystemOperationsPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
-        panel.setBackground(ThemeUtil.COLOR_BG_PANEL);
+        panel.setBackground(ThemeUtil.COLOR_BACKGROUND);
 
         JButton endOfMonthBtn = new JButton("Run End of Month Processing");
         ThemeUtil.styleButton(endOfMonthBtn);
@@ -259,11 +340,11 @@ public class AdminDashboard extends JFrame {
     // ─────────────────────────────────────────────────────────────────
     private JPanel createBusinessReportsPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(ThemeUtil.COLOR_BG_PANEL);
+        panel.setBackground(ThemeUtil.COLOR_BACKGROUND);
 
         JLabel header = new JLabel("Aggregated Business Reports", SwingConstants.CENTER);
         header.setFont(ThemeUtil.HEADER_FONT);
-        header.setForeground(ThemeUtil.COLOR_YELLOW);
+        header.setForeground(ThemeUtil.COLOR_PRIMARY);
         header.setBorder(new EmptyBorder(12, 10, 12, 10));
         panel.add(header, BorderLayout.NORTH);
 
@@ -274,7 +355,7 @@ public class AdminDashboard extends JFrame {
         panel.add(new JScrollPane(reportArea), BorderLayout.CENTER);
 
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
-        bottom.setBackground(ThemeUtil.COLOR_BG_PANEL);
+        bottom.setBackground(ThemeUtil.COLOR_BACKGROUND);
 
         JButton genBtn = new JButton("Generate Comprehensive Report");
         ThemeUtil.styleButton(genBtn);
@@ -370,25 +451,80 @@ public class AdminDashboard extends JFrame {
     private JLabel makeLabel(String text) {
         JLabel lbl = new JLabel(text);
         lbl.setFont(ThemeUtil.LABEL_FONT);
-        lbl.setForeground(ThemeUtil.COLOR_YELLOW);
+        lbl.setForeground(ThemeUtil.COLOR_PRIMARY);
         return lbl;
     }
 
     private void styleTable(JTable table) {
-        table.setRowHeight(26);
+        table.setRowHeight(30);
         table.setFont(ThemeUtil.LABEL_FONT);
-        table.getTableHeader().setFont(ThemeUtil.LABEL_FONT.deriveFont(Font.BOLD));
-        table.getTableHeader().setBackground(ThemeUtil.COLOR_MAROON);
-        table.getTableHeader().setForeground(ThemeUtil.COLOR_YELLOW);
-        table.setBackground(ThemeUtil.COLOR_BG_PANEL);
-        table.setForeground(Color.WHITE);
-        table.setGridColor(ThemeUtil.COLOR_BROWN);
-        table.setSelectionBackground(ThemeUtil.COLOR_MAROON);
-        table.setSelectionForeground(Color.WHITE);
+        table.getTableHeader().setFont(ThemeUtil.BUTTON_FONT);
+        table.getTableHeader().setBackground(ThemeUtil.COLOR_PRIMARY);
+        table.getTableHeader().setForeground(ThemeUtil.COLOR_ACCENT);
+        table.setBackground(Color.WHITE);
+        table.setForeground(ThemeUtil.COLOR_TEXT_DARK);
+        table.setGridColor(ThemeUtil.COLOR_LIGHT_BG);
+        table.setSelectionBackground(ThemeUtil.COLOR_PRIMARY);
+        table.setSelectionForeground(ThemeUtil.COLOR_ACCENT);
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         for (int i = 0; i < table.getColumnCount(); i++) {
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
+    }
+
+    /**
+     * Creates a Font that supports emoji rendering on the current platform.
+     * Attempts to use platform-specific emoji fonts in order of preference.
+     * 
+     * Font selection priority:
+     * 1. "Segoe UI Emoji" (Windows - default, most reliable)
+     * 2. "Apple Color Emoji" (macOS)
+     * 3. "Noto Color Emoji" (Linux - Google's emoji font)
+     * 4. "Segoe UI" (Windows fallback)
+     * 5. "Dialog" (Universal fallback)
+     * 
+     * Root cause: Java Swing's default fonts (Segoe UI, Dialog) don't include
+     * Unicode glyphs for emoji characters. When a font lacks a glyph, Java displays
+     * the replacement character (U+FFFD = □). Using emoji-specific fonts ensures
+     * proper emoji rendering across platforms.
+     * 
+     * @param size Font size in points
+     * @return A Font that can properly render emoji characters, or fallback font
+     */
+    private Font createEmojiSupportingFont(int size) {
+        String[] emojiFonts = {
+            "Segoe UI Emoji",      // Windows primary
+            "Apple Color Emoji",   // macOS
+            "Noto Color Emoji",    // Linux (Google's emoji font)
+            "Segoe UI",            // Windows fallback
+            "Dialog"               // Universal fallback
+        };
+
+        for (String fontName : emojiFonts) {
+            if (isFontAvailable(fontName)) {
+                return new Font(fontName, Font.PLAIN, size);
+            }
+        }
+
+        // Final fallback
+        return new Font("Dialog", Font.PLAIN, size);
+    }
+
+    /**
+     * Checks if a specific font is available on the system.
+     * 
+     * @param fontName Name of the font to check
+     * @return true if the font is available, false otherwise
+     */
+    private boolean isFontAvailable(String fontName) {
+        String[] availableFonts = GraphicsEnvironment.getLocalGraphicsEnvironment()
+            .getAvailableFontFamilyNames();
+        for (String font : availableFonts) {
+            if (font.equalsIgnoreCase(fontName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

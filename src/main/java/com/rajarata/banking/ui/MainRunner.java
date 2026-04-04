@@ -17,13 +17,13 @@ public class MainRunner {
         // 2. Safely populate default records if none exist
         UserDAO userDAO = new UserDAO();
         if (userDAO.getAllUsers().isEmpty()) {
-            System.out.println("No users found. Creating mock dataset...");
+            System.out.println("Initializing default dataset...");
             
             Administrator admin = new Administrator("A1", "Super Admin", "admin@bank.com", "011", "SA", "IT");
             admin.setPasswordHash(Base64.getEncoder().encodeToString("admin123".getBytes()));
             userDAO.addUser(admin, "ADMIN");
 
-            Customer cust = new Customer("C1", "Jane Doe", "jane@bank.com", "077", "Col", LocalDate.of(1995, 1, 1));
+            Customer cust = new Customer("C1", "Jane Doe", "jane@bank.com", "077", "Colombo", LocalDate.of(1995, 1, 1));
             cust.setPasswordHash(Base64.getEncoder().encodeToString("cust123".getBytes()));
             userDAO.addUser(cust, "CUSTOMER");
             
@@ -34,10 +34,10 @@ public class MainRunner {
             accountDAO.createAccount(checkAcc);
             accountDAO.createAccount(saveAcc);
 
-            System.out.println("Default records injected successfully.");
+            System.out.println("✅ System initialized successfully.");
         }
 
-        // 3. Launch UI Loop
+        // 3. Launch UI
         SwingUtilities.invokeLater(() -> {
             ThemeUtil.applyTheme();
             new LoginFrame(userDAO).setVisible(true);
