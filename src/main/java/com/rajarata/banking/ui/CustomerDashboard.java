@@ -1,27 +1,57 @@
 package com.rajarata.banking.ui;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.RenderingHints;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
 import com.rajarata.banking.db.AccountDAO;
 import com.rajarata.banking.db.TransactionDAO;
 import com.rajarata.banking.domain.accounts.BankAccount;
+import com.rajarata.banking.domain.loans.Loan;
+import com.rajarata.banking.domain.loans.LoanType;
 import com.rajarata.banking.domain.notifications.NotificationService;
 import com.rajarata.banking.domain.security.AuditLogger;
 import com.rajarata.banking.domain.services.BankingService;
 import com.rajarata.banking.domain.services.BillPaymentService;
+import com.rajarata.banking.domain.services.FraudDetectionService;
 import com.rajarata.banking.domain.services.LoanService;
 import com.rajarata.banking.domain.services.StatementService;
-import com.rajarata.banking.domain.services.FraudDetectionService;
 import com.rajarata.banking.domain.transactions.Transaction;
 import com.rajarata.banking.domain.users.Customer;
-import com.rajarata.banking.domain.loans.Loan;
-import com.rajarata.banking.domain.loans.LoanType;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.awt.RenderingHints;
-import java.util.List;
 
 /**
  * Modern customer dashboard with professional design.
@@ -684,8 +714,11 @@ public class CustomerDashboard extends JFrame {
         dialog.setLocationRelativeTo(this);
         
         JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(ThemeUtil.COLOR_BACKGROUND);
-        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1),
+            new EmptyBorder(20, 20, 20, 20)
+        ));
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -750,8 +783,11 @@ public class CustomerDashboard extends JFrame {
         dialog.setLocationRelativeTo(this);
         
         JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(ThemeUtil.COLOR_BACKGROUND);
-        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1),
+            new EmptyBorder(20, 20, 20, 20)
+        ));
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -816,8 +852,11 @@ public class CustomerDashboard extends JFrame {
         dialog.setLocationRelativeTo(this);
         
         JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(ThemeUtil.COLOR_BACKGROUND);
-        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1),
+            new EmptyBorder(20, 20, 20, 20)
+        ));
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -892,8 +931,11 @@ public class CustomerDashboard extends JFrame {
         dialog.setLocationRelativeTo(this);
         
         JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(ThemeUtil.COLOR_BACKGROUND);
-        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1),
+            new EmptyBorder(20, 20, 20, 20)
+        ));
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -1045,22 +1087,22 @@ public class CustomerDashboard extends JFrame {
                 
                 // Card background with rounded corners (clean design)
                 if (hovered) {
-                    g2.setColor(new Color(250, 248, 245)); // Light cream on hover
+                    g2.setColor(new Color(240, 245, 255)); // Light blue on hover
                 } else {
                     g2.setColor(ThemeUtil.COLOR_WHITE); // White background
                 }
                 g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 10, 10);
                 
-                // Subtle shadow effect
-                g2.setColor(new Color(0, 0, 0, 8));
-                g2.fillRoundRect(2, 2, getWidth() - 4, getHeight() - 4, 10, 10);
+                // Enhanced shadow effect for more depth
+                g2.setColor(new Color(0, 0, 0, 20));
+                g2.fillRoundRect(2, 2, getWidth() - 5, getHeight() - 5, 10, 10);
                 
-                // Left border accent (clean, minimal)
+                // Left border accent (thicker and more vibrant)
                 g2.setColor(ThemeUtil.COLOR_ACCENT);
-                g2.fillRect(0, 0, 3, getHeight());
+                g2.fillRect(0, 0, 5, getHeight());
                 
-                // Light border
-                g2.setColor(new Color(200, 200, 200));
+                // Optional: Add a subtle light gray border for better definition
+                g2.setColor(new Color(220, 220, 220));
                 g2.setStroke(new java.awt.BasicStroke(1));
                 g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 10, 10);
                 
@@ -1088,7 +1130,7 @@ public class CustomerDashboard extends JFrame {
         // Icon - medium sized, centered
         // Fix emoji display
         JLabel iconLabel = new JLabel(icon);
-        Font emojiFont = createEmojiSupportingFont(28); // Smaller icon size
+        Font emojiFont = createEmojiSupportingFont(24); // Smaller icon size
         iconLabel.setFont(emojiFont);
         btn.add(iconLabel, gbc);
 
