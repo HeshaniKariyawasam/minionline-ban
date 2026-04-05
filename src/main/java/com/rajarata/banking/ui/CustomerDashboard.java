@@ -110,7 +110,7 @@ public class CustomerDashboard extends JFrame {
 
         // Center: Welcome message with proper alignment
         JLabel welcomeLabel = new JLabel("Welcome, " + customer.getName());
-        welcomeLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 16));
         welcomeLabel.setForeground(ThemeUtil.COLOR_WHITE);
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         JPanel centerPanel = new JPanel(new BorderLayout());
