@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.Base64;
 
 public class MainRunner {
-    public static void main(String[] args) {
+    public static void main(String[] args) {  
         // 1. Establish SQLite DB and tables
         DatabaseManager.initializeDatabase();
         

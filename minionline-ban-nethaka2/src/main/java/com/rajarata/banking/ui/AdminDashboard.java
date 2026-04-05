@@ -129,9 +129,9 @@ public class AdminDashboard extends JFrame {
         return headerPanel;
     }
 
-    // ─────────────────────────────────────────────────────────────────
+    
     //  USER MANAGEMENT
-    // ─────────────────────────────────────────────────────────────────
+    
     private JPanel createUserPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(ThemeUtil.COLOR_BACKGROUND);
