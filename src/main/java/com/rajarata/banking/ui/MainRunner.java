@@ -45,3 +45,4 @@ public class MainRunner {
     }
 }
 //this class serves as the entry point for the banking application. It initializes the database, populates default records if necessary, and launches the login UI.
+//test
