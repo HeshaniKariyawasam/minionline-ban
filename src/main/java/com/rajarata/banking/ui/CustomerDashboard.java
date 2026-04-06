@@ -1079,21 +1079,25 @@ public class CustomerDashboard extends JFrame {
         btn.setContentAreaFilled(false);
         btn.setOpaque(false);
         btn.setPreferredSize(new Dimension(180, 140));
-        btn.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10)); // Reduced padding
+        btn.setBorder(BorderFactory.createEmptyBorder(2, 10, 8, 10));
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
-        gbc.weighty = 0.3; // Reduced weighty
+        gbc.weighty = 0.55;
+        gbc.insets = new Insets(0, 0, 0, 0);
 
         // Icon - medium sized, centered
-        // Fix emoji display
         JLabel iconLabel = new JLabel(icon);
-        Font emojiFont = createEmojiSupportingFont(28); // Smaller icon size
+        Font emojiFont = createEmojiSupportingFont(36);
         iconLabel.setFont(emojiFont);
+        iconLabel.setMinimumSize(new Dimension(50, 50));
+        iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        iconLabel.setVerticalAlignment(SwingConstants.CENTER);
         btn.add(iconLabel, gbc);
 
         // Vertical spacing
@@ -1227,7 +1231,8 @@ public class CustomerDashboard extends JFrame {
     private void styleButton(JButton btn) {
         btn.setBackground(ThemeUtil.COLOR_PRIMARY);
         btn.setForeground(ThemeUtil.COLOR_WHITE);
-        btn.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        Font buttonFont = createEmojiSupportingFont(12);
+        btn.setFont(new Font(buttonFont.getName(), Font.BOLD, 12));
         btn.setFocusPainted(false);
         btn.setBorderPainted(false);
         btn.setContentAreaFilled(true);
