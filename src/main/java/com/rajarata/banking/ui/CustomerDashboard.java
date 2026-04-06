@@ -10,6 +10,7 @@ import com.rajarata.banking.domain.services.BillPaymentService;
 import com.rajarata.banking.domain.services.LoanService;
 import com.rajarata.banking.domain.services.StatementService;
 import com.rajarata.banking.domain.services.FraudDetectionService;
+import com.rajarata.banking.domain.services.InterestSimulationEngine;
 import com.rajarata.banking.domain.transactions.Transaction;
 import com.rajarata.banking.domain.users.Customer;
 import com.rajarata.banking.domain.loans.Loan;
@@ -500,7 +501,6 @@ public class CustomerDashboard extends JFrame {
         gbc.weightx = 1.0;
 
         JLabel titleLabel = new JLabel("📈 Apply for a Loan");
-        // Fix emoji display
         Font emojiFont = createEmojiSupportingFont(ThemeUtil.HEADER_FONT.getSize());
         titleLabel.setFont(new Font(emojiFont.getName(), ThemeUtil.HEADER_FONT.getStyle(), emojiFont.getSize()));
         titleLabel.setForeground(ThemeUtil.COLOR_PRIMARY);
@@ -513,6 +513,7 @@ public class CustomerDashboard extends JFrame {
         JTextField termField = new JTextField(20);
         styleTextField(amountField);
         styleTextField(termField);
+        refreshAccountSelectors(accSelector);
 
         gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 1;
         panel.add(createStyledLabel("Disbursement Account:"), gbc);
@@ -1355,7 +1356,56 @@ public class CustomerDashboard extends JFrame {
     }
 
     private void showInterestSimulator() {
-        JOptionPane.showMessageDialog(this, "Select an account from the Accounts tab first.", "Info", JOptionPane.INFORMATION_MESSAGE);
+        String selectedAccNum = (String) accountSelector.getSelectedItem();
+        if (selectedAccNum == null) {
+            JOptionPane.showMessageDialog(this, "Please select an account first.", "No Account Selected", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        BankAccount account = accountDAO.getAccountByNumber(selectedAccNum);
+        if (account == null) {
+            JOptionPane.showMessageDialog(this, "Account not found.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        JPanel inputPanel = new JPanel(new GridLayout(2, 1, 5, 5));
+        inputPanel.add(new JLabel("Months to simulate:"));
+        JTextField monthsField = new JTextField("12");
+        inputPanel.add(monthsField);
+
+        int choice = JOptionPane.showConfirmDialog(this, inputPanel, "Interest Simulator", JOptionPane.OK_CANCEL_OPTION);
+        if (choice != JOptionPane.OK_OPTION) return;
+
+        try {
+            int months = Integer.parseInt(monthsField.getText().trim());
+            if (months <= 0) throw new IllegalArgumentException("Months must be positive");
+
+            double currentBalance = account.getBalance();
+            double simulatedBalance = InterestSimulationEngine.simulateFutureBalance(account, months);
+            double totalInterest = simulatedBalance - currentBalance;
+
+            String result = String.format(
+                "💰 Interest Simulation Results\n\n" +
+                "Account: %s\n" +
+                "Current Balance: LKR %.2f\n" +
+                "Simulation Period: %d months\n\n" +
+                "Projected Balance: LKR %.2f\n" +
+                "Total Interest Earned: LKR %.2f\n" +
+                "Average Monthly Interest: LKR %.2f",
+                selectedAccNum,
+                currentBalance,
+                months,
+                simulatedBalance,
+                totalInterest,
+                totalInterest / months
+            );
+
+            JOptionPane.showMessageDialog(this, result, "Interest Simulator", JOptionPane.INFORMATION_MESSAGE);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid number of months", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void performTransaction(String type, JTextField amountField, JTextField targetField, JTextField clearField) {
