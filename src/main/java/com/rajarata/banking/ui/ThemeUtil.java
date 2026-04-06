@@ -131,13 +131,6 @@ public class ThemeUtil {
         return null;
     }
 
-    public static void applyWindowIcon(JFrame frame) {
-        ImageIcon windowIcon = loadLogoIcon(32, 32);
-        if (windowIcon != null) {
-            frame.setIconImage(windowIcon.getImage());
-        }
-    }
-
     public static Font createEmojiSupportingFont(int size) {
         return new Font("Segoe UI Emoji", Font.PLAIN, size);
     }}

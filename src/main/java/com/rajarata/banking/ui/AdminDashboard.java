@@ -36,7 +36,6 @@ public class AdminDashboard extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        ThemeUtil.applyWindowIcon(this);
         
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(ThemeUtil.COLOR_BACKGROUND);

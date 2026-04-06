@@ -23,7 +23,6 @@ public class LoginFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
-        ThemeUtil.applyWindowIcon(this);
         
         // Create main content panel with two sections
         JPanel mainContent = new JPanel(new GridLayout(1, 2, 0, 0));
