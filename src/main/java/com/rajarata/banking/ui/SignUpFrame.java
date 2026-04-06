@@ -24,6 +24,7 @@ public class SignUpFrame extends JFrame {
         setSize(450, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        ThemeUtil.applyWindowIcon(this);
         getContentPane().setBackground(ThemeUtil.COLOR_BACKGROUND);
 
         setLayout(new GridBagLayout());
