@@ -67,6 +67,7 @@ public class CustomerDashboard extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+        ThemeUtil.applyWindowIcon(this);
         
         // Create main layout
         JPanel mainPanel = new JPanel(new BorderLayout());
