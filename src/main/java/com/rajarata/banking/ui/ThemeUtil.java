@@ -41,13 +41,36 @@ public class ThemeUtil {
     public static void styleButton(JButton btn) {
         btn.setBackground(COLOR_PRIMARY);
         btn.setForeground(COLOR_WHITE);
-        btn.setFont(BUTTON_FONT);
+        Font emojiFont = getEmojiSupportingFont(14);
+        btn.setFont(new Font(emojiFont.getName(), Font.BOLD, 14));
         btn.setFocusPainted(false);
         btn.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(COLOR_PRIMARY, 2),
             BorderFactory.createEmptyBorder(10, 20, 10, 20)
         ));
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }
+
+    private static Font getEmojiSupportingFont(int size) {
+        String[] emojiFonts = {
+            "Segoe UI Emoji",      // Windows (built-in, most reliable)
+            "Apple Color Emoji",   // macOS
+            "Noto Color Emoji",    // Linux
+            "Segoe UI",            // Fallback
+            "Dialog"               // Universal fallback
+        };
+        
+        String[] availableFonts = GraphicsEnvironment.getLocalGraphicsEnvironment()
+            .getAvailableFontFamilyNames();
+        
+        for (String fontName : emojiFonts) {
+            for (String available : availableFonts) {
+                if (available.equalsIgnoreCase(fontName)) {
+                    return new Font(fontName, Font.PLAIN, size);
+                }
+            }
+        }
+        return new Font("Dialog", Font.PLAIN, size);
     }
 
     /**
